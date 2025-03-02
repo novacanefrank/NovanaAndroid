@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/soft_beige">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exercises Fragment"
+        android:text="Exercises"
         android:textSize="24sp"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"/>
@@ -25,6 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginTop="40dp"
             android:hint="Enter exercise name"
             android:layout_marginEnd="8dp"/>
 
@@ -32,6 +34,8 @@
             android:id="@+id/addExerciseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:backgroundTint="#388B97"
             android:text="Add Exercise"/>
 
     </LinearLayout>
@@ -49,7 +53,7 @@
         android:layout_height="wrap_content"
         android:text="Back"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#800080"
+        android:backgroundTint="#100507"
         android:padding="8dp"
         android:layout_marginStart="8dp"/>
 

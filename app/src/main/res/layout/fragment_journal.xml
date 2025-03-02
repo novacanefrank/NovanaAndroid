@@ -3,13 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/soft_beige">  <!-- Dashboard Background Color -->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Journal Fragment"
+        android:text="Journal"
+        android:textStyle="bold"
+        android:textColorHint="@color/soft_beige"
         android:textSize="24sp"
+        android:textColor="#333333"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"/>
 
@@ -19,6 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Write your journal entry here..."
+        android:background="#FFFFFF"
+        android:padding="12dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="16dp"/>
 
     <Button
@@ -26,8 +33,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save Entry"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#388B97"
+    android:padding="12dp"
+        android:layout_marginTop="40dp"
+    android:layout_gravity="center"
+    android:layout_marginBottom="16dp"/>
 
     <!-- Button to show old entries -->
     <Button
@@ -35,7 +46,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Old Entries"
-        android:layout_gravity="center"/>
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#388B97"
+    android:padding="12dp"
+    android:layout_gravity="center"
+    android:layout_marginBottom="16dp"/>
 
     <!-- RecyclerView to display old entries (hidden by default) -->
     <androidx.recyclerview.widget.RecyclerView
@@ -44,13 +59,15 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:visibility="gone"/>
+
+
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#800080"
+        android:backgroundTint="#100507"
         android:padding="8dp"
         android:layout_marginStart="8dp"/>
 

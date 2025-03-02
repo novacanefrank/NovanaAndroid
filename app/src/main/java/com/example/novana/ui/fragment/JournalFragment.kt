@@ -23,7 +23,7 @@ class JournalFragment : Fragment() {
     private lateinit var oldEntriesButton: Button
     private lateinit var backButton: Button
     private lateinit var oldEntriesRecyclerView: RecyclerView
-    private lateinit var viewModel:JournalViewModel
+    private lateinit var viewModel: JournalViewModel
     private var isShowingOldEntries = false
 
     override fun onCreateView(
@@ -43,7 +43,7 @@ class JournalFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(JournalViewModel::class.java)
 
         // Set up RecyclerView
-        val journalEntries = mutableListOf<JournalEntryModel>() // Temporary until Firestore integration
+        val journalEntries = mutableListOf<JournalEntryModel>()
         val adapter = JournalEntriesAdapter(journalEntries, ::onUpdateClick, ::onDeleteClick)
         oldEntriesRecyclerView.layoutManager = LinearLayoutManager(context)
         oldEntriesRecyclerView.adapter = adapter
@@ -58,7 +58,7 @@ class JournalFragment : Fragment() {
             error?.let { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
         }
 
-        // Set click listener for Save button
+        // Save Button
         saveJournalButton.setOnClickListener {
             val entryText = journalEntryEditText.text.toString().trim()
             if (entryText.isNotEmpty()) {
@@ -72,7 +72,7 @@ class JournalFragment : Fragment() {
             }
         }
 
-        // Set click listener for Old Entries button
+        // Old Entries Button
         oldEntriesButton.setOnClickListener {
             isShowingOldEntries = !isShowingOldEntries
             oldEntriesRecyclerView.visibility = if (isShowingOldEntries) View.VISIBLE else View.GONE
@@ -83,10 +83,11 @@ class JournalFragment : Fragment() {
             }
         }
 
-        // Set click listener for Back button with interface
+        // Back Button
         backButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
-            (requireActivity() as? DashboardNavigator)?.resetDashboardUI() ?: Log.w("JournalFragment", "DashboardNavigator not implemented")
+            (requireActivity() as? DashboardNavigator)?.resetDashboardUI()
+                ?: Log.w("JournalFragment", "DashboardNavigator not implemented")
         }
 
         return view

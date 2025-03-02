@@ -25,7 +25,7 @@ class DashboardActivity : AppCompatActivity(), DashboardNavigator {
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Log the views to ensure they’re not null
+        // Log the views to ensure they're not null
         Log.d("DashboardActivity", "userProfileIcon: ${binding.userProfileIcon}")
         Log.d("DashboardActivity", "journalCard: ${binding.journalCard}")
         Log.d("DashboardActivity", "dailyExercisesCard: ${binding.dailyExercisesCard}")
@@ -41,21 +41,24 @@ class DashboardActivity : AppCompatActivity(), DashboardNavigator {
         binding.journalCard.setOnClickListener {
             replaceFragment(JournalFragment())
             binding.fragmentContainer.visibility = View.VISIBLE
-            binding.gridContainer.visibility = View.GONE
+            binding.cardsContainer.visibility = View.GONE
+            binding.dashboardImageContainer.visibility = View.GONE
             Toast.makeText(this, "Journal clicked", Toast.LENGTH_SHORT).show()
         }
 
         binding.dailyExercisesCard.setOnClickListener {
             replaceFragment(ExercisesFragment())
             binding.fragmentContainer.visibility = View.VISIBLE
-            binding.gridContainer.visibility = View.GONE
+            binding.cardsContainer.visibility = View.GONE
+            binding.dashboardImageContainer.visibility = View.GONE
             Toast.makeText(this, "Daily Exercises clicked", Toast.LENGTH_SHORT).show()
         }
 
         binding.setGoalsCard.setOnClickListener {
             replaceFragment(GoalsFragment())
             binding.fragmentContainer.visibility = View.VISIBLE
-            binding.gridContainer.visibility = View.GONE
+            binding.cardsContainer.visibility = View.GONE
+            binding.dashboardImageContainer.visibility = View.GONE
             Toast.makeText(this, "Set Goals clicked", Toast.LENGTH_SHORT).show()
         }
     }
@@ -72,7 +75,8 @@ class DashboardActivity : AppCompatActivity(), DashboardNavigator {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
             binding.fragmentContainer.visibility = View.GONE
-            binding.gridContainer.visibility = View.VISIBLE
+            binding.cardsContainer.visibility = View.VISIBLE
+            binding.dashboardImageContainer.visibility = View.VISIBLE
             Log.d("DashboardActivity", "Popped back stack, fragments remaining: ${supportFragmentManager.backStackEntryCount}")
         } else {
             super.onBackPressed()
@@ -81,7 +85,8 @@ class DashboardActivity : AppCompatActivity(), DashboardNavigator {
 
     override fun resetDashboardUI() {
         binding.fragmentContainer.visibility = View.GONE
-        binding.gridContainer.visibility = View.VISIBLE
+        binding.cardsContainer.visibility = View.VISIBLE
+        binding.dashboardImageContainer.visibility = View.VISIBLE
     }
 
     private fun showProfileDialog() {
