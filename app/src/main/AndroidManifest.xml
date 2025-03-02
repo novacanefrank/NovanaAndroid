@@ -18,23 +18,16 @@
         tools:replace="android:fullBackupContent"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.DashboardActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.DashboardActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.activity.RegisterActivity"
             android:exported="true" />
@@ -43,7 +36,6 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.LOGIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

@@ -10,12 +10,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import java.util.Date
-import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(
-    private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
-) : UserRepository {
+class UserRepositoryImpl : UserRepository {
+
+    private val auth = FirebaseAuth.getInstance()
+    private val firestore = FirebaseFirestore.getInstance()
 
     override suspend fun registerUser(email: String, password: String, username: String): Result<UserModel> {
         return try {
@@ -28,7 +27,7 @@ class UserRepositoryImpl @Inject constructor(
                     email = email,
                     createdAt = Date()
                 )
-                saveUserData(user) // Save user data to Firestore
+                saveUserData(user)
                 Result.success(user)
             } else {
                 Result.failure(Exception("Registration failed: User is null"))

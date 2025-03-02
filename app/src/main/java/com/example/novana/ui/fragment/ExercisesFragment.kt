@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.novana.R
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
-import com.example.novana.ui.activity.DashboardActivity
+import com.example.novana.ui.activity.DashboardNavigator
 
 class ExercisesFragment : Fragment() {
 
@@ -55,10 +55,10 @@ class ExercisesFragment : Fragment() {
             }
         }
 
-        // Set click listener for Back button
+        // Set click listener for Back button with interface
         backButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
-            (requireActivity() as DashboardActivity).resetDashboardUI()
+            (requireActivity() as? DashboardNavigator)?.resetDashboardUI() ?: Log.w("ExercisesFragment", "DashboardNavigator not implemented")
         }
 
         return view

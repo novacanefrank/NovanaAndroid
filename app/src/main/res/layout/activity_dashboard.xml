@@ -37,67 +37,11 @@
             android:textStyle="bold"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/notesSection"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="#FFFFFF"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/greetingSection"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.3">
-
-        <EditText
-            android:id="@+id/notesEditText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:hint="Write your notes here..."
-            android:background="@drawable/rounded_edittext"
-            android:padding="12dp"
-            android:textColor="#333333"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:scrollbars="vertical"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
-
-            <Button
-                android:id="@+id/saveNotesButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#4A704B"
-                android:padding="8dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"/>
-
-            <Button
-                android:id="@+id/showOldNotesButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Show Old Notes"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#4A704B"
-                android:padding="8dp"
-                android:layout_weight="1"/>
-        </LinearLayout>
-    </LinearLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gridContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/notesSection"
+        app:layout_constraintTop_toBottomOf="@id/greetingSection"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
@@ -208,26 +152,16 @@
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notesRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/notesSection"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/gridContainer"
-        android:visibility="gone"/>
-
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/greetingSection"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    android:layout_margin="16dp"
-    android:background="#FFFFFF"
-    android:visibility="gone"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="16dp"
+        android:background="#FFFFFF"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

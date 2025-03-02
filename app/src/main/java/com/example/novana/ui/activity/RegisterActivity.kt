@@ -1,24 +1,42 @@
 package com.example.novana.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.novana.databinding.ActivityRegisterBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.example.novana.viewmodel.UserViewModel
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.util.Log
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var auth: FirebaseAuth
+    private lateinit var viewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        // Observe loading and error states
+        viewModel.isLoading.observe(this) { isLoading ->
+            // Optionally update UI (e.g., show/hide progress bar)
+        }
+        viewModel.errorMessage.observe(this) { error ->
+            error?.let { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
+        }
+        viewModel.user.observe(this) { user ->
+            user?.let {
+                Toast.makeText(this, "Registration successful! Welcome, ${user.email}", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java)) // Navigate to MainActivity
+                finish()
+            }
+        }
 
         // Log the views to ensure they’re not null
         Log.d("RegisterActivity", "usernameEditText: ${binding.usernameEditText}")
@@ -33,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString().trim()
 
             if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                register(username, email, password)
+                viewModel.registerUser(email, password, username)
             } else {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
@@ -41,22 +59,7 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.loginText.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
-            finish()  // Optional: Finish RegisterActivity to prevent back navigation
+            finish() // Optional: Finish RegisterActivity to prevent back navigation
         }
-    }
-
-    private fun register(username: String, email: String, password: String) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    // Optionally save username to Firebase Realtime Database or Firestore
-                    Toast.makeText(this, "Registration successful! Welcome, ${user?.email}", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))  // Or LoginActivity, depending on your flow
-                    finish()
-                } else {
-                    Toast.makeText(this, "Registration failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
     }
 }

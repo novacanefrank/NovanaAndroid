@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.novana.R
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
-import com.example.novana.ui.activity.DashboardActivity
+import com.example.novana.ui.activity.DashboardNavigator
+import com.example.novana.viewmodel.JournalViewModel
 
 class JournalFragment : Fragment() {
 
@@ -21,9 +23,7 @@ class JournalFragment : Fragment() {
     private lateinit var oldEntriesButton: Button
     private lateinit var backButton: Button
     private lateinit var oldEntriesRecyclerView: RecyclerView
-    private val journalEntries = mutableListOf<JournalEntryModel>()
-    private var nextId = 0
-    private lateinit var adapter: JournalEntriesAdapter
+    private lateinit var viewModel:JournalViewModel
     private var isShowingOldEntries = false
 
     override fun onCreateView(
@@ -39,17 +39,32 @@ class JournalFragment : Fragment() {
         backButton = view.findViewById(R.id.backButton)
         oldEntriesRecyclerView = view.findViewById(R.id.oldEntriesRecyclerView)
 
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this).get(JournalViewModel::class.java)
+
         // Set up RecyclerView
-        adapter = JournalEntriesAdapter(journalEntries, ::onUpdateClick, ::onDeleteClick)
+        val journalEntries = mutableListOf<JournalEntryModel>() // Temporary until Firestore integration
+        val adapter = JournalEntriesAdapter(journalEntries, ::onUpdateClick, ::onDeleteClick)
         oldEntriesRecyclerView.layoutManager = LinearLayoutManager(context)
         oldEntriesRecyclerView.adapter = adapter
+
+        // Observe journal entries from ViewModel
+        viewModel.journalEntries.observe(viewLifecycleOwner) { entries ->
+            journalEntries.clear()
+            journalEntries.addAll(entries)
+            adapter.notifyDataSetChanged()
+        }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            error?.let { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+        }
 
         // Set click listener for Save button
         saveJournalButton.setOnClickListener {
             val entryText = journalEntryEditText.text.toString().trim()
             if (entryText.isNotEmpty()) {
-                val newEntry = JournalEntryModel(nextId++, entryText)
-                journalEntries.add(newEntry)
+                val userId = getCurrentUserId()
+                val newEntry = JournalEntryModel(id = System.currentTimeMillis().toInt(), text = entryText)
+                viewModel.addEntry(newEntry, userId)
                 journalEntryEditText.text.clear()
                 Toast.makeText(context, "Entry saved", Toast.LENGTH_SHORT).show()
             } else {
@@ -62,15 +77,16 @@ class JournalFragment : Fragment() {
             isShowingOldEntries = !isShowingOldEntries
             oldEntriesRecyclerView.visibility = if (isShowingOldEntries) View.VISIBLE else View.GONE
             if (isShowingOldEntries) {
-                adapter.notifyDataSetChanged()
+                val userId = getCurrentUserId()
+                viewModel.loadEntries(userId)
                 Toast.makeText(context, "Showing old entries", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Set click listener for Back button
+        // Set click listener for Back button with interface
         backButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
-            (requireActivity() as DashboardActivity).resetDashboardUI()
+            (requireActivity() as? DashboardNavigator)?.resetDashboardUI() ?: Log.w("JournalFragment", "DashboardNavigator not implemented")
         }
 
         return view
@@ -79,7 +95,8 @@ class JournalFragment : Fragment() {
     private fun onUpdateClick(entry: JournalEntryModel) {
         val newText = journalEntryEditText.text.toString().trim()
         if (newText.isNotEmpty()) {
-            adapter.updateEntry(entry, newText)
+            entry.text = newText
+            viewModel.updateEntry(entry)
             journalEntryEditText.text.clear()
             oldEntriesRecyclerView.visibility = View.GONE
             isShowingOldEntries = false
@@ -90,8 +107,11 @@ class JournalFragment : Fragment() {
     }
 
     private fun onDeleteClick(entry: JournalEntryModel) {
-        journalEntries.remove(entry)
-        adapter.removeEntry(entry)
+        viewModel.deleteEntry(entry.id)
         Toast.makeText(context, "Entry deleted", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getCurrentUserId(): String {
+        return com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
     }
 }
