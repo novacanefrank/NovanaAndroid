@@ -1,46 +1,28 @@
-package com.example.novana.model
+package com.example.novana.data.model
 
-import android.os.Parcel
-import android.os.Parcelable
+import java.util.Date
 
 data class UserModel(
-    var UserId:String="",
-    var Firstname:String="",
-    var Lastname:String="",
-    var Address:String="",
-    var Contact:String="",
-    var Email:String="",
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString()?:"",
-        parcel.readString()?:"",
-        parcel.readString()?:"",
-        parcel.readString()?:"",
-        parcel.readString()?:"",
-        parcel.readString()?:"",
-    ) {
-    }
+    val id: String = "", // Firebase UID or custom ID
+    val username: String = "",
+    val email: String = "",
+    val password: String = "", // Note: Avoid storing plain passwords; use securely
+    val createdAt: Date = Date(), // Timestamp of user creation
+    val isActive: Boolean = true // Optional: Track user status
+) {
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(UserId)
-        parcel.writeString(Firstname)
-        parcel.writeString(Lastname)
-        parcel.writeString(Address)
-        parcel.writeString(Contact)
-        parcel.writeString(Email)
-    }
+    // Default constructor required for Firebase
+    constructor() : this("", "", "", "", Date(), true)
 
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<UserModel> {
-        override fun createFromParcel(parcel: Parcel): UserModel {
-            return UserModel(parcel)
-        }
-
-        override fun newArray(size: Int): Array<UserModel?> {
-            return arrayOfNulls(size)
-        }
+    // Optional: To convert to a Map for Firebase
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "id" to id,
+            "username" to username,
+            "email" to email,
+            "password" to password, // Avoid storing password in production
+            "createdAt" to createdAt,
+            "isActive" to isActive
+        )
     }
 }

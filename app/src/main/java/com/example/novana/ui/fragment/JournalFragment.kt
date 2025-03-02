@@ -11,12 +11,15 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.novana.R
 import androidx.recyclerview.widget.RecyclerView
+import android.util.Log
+import com.example.novana.ui.activity.DashboardActivity
 
 class JournalFragment : Fragment() {
 
     private lateinit var journalEntryEditText: EditText
     private lateinit var saveJournalButton: Button
     private lateinit var oldEntriesButton: Button
+    private lateinit var backButton: Button
     private lateinit var oldEntriesRecyclerView: RecyclerView
     private val journalEntries = mutableListOf<JournalEntryModel>()
     private var nextId = 0
@@ -33,6 +36,7 @@ class JournalFragment : Fragment() {
         journalEntryEditText = view.findViewById(R.id.journalEntryEditText)
         saveJournalButton = view.findViewById(R.id.saveJournalButton)
         oldEntriesButton = view.findViewById(R.id.oldEntriesButton)
+        backButton = view.findViewById(R.id.backButton)
         oldEntriesRecyclerView = view.findViewById(R.id.oldEntriesRecyclerView)
 
         // Set up RecyclerView
@@ -61,6 +65,12 @@ class JournalFragment : Fragment() {
                 adapter.notifyDataSetChanged()
                 Toast.makeText(context, "Showing old entries", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Set click listener for Back button
+        backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as DashboardActivity).resetDashboardUI()
         }
 
         return view

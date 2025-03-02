@@ -11,11 +11,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.novana.R
 import androidx.recyclerview.widget.RecyclerView
+import android.util.Log
+import com.example.novana.ui.activity.DashboardActivity
 
 class GoalsFragment : Fragment() {
 
     private lateinit var goalNameEditText: EditText
     private lateinit var addGoalButton: Button
+    private lateinit var backButton: Button
     private lateinit var goalsRecyclerView: RecyclerView
     private val goals = mutableListOf<GoalsModel>()
     private var nextId = 0
@@ -30,6 +33,7 @@ class GoalsFragment : Fragment() {
         // Initialize views
         goalNameEditText = view.findViewById(R.id.goalNameEditText)
         addGoalButton = view.findViewById(R.id.addGoalButton)
+        backButton = view.findViewById(R.id.backButton)
         goalsRecyclerView = view.findViewById(R.id.goalsRecyclerView)
 
         // Set up RecyclerView
@@ -49,6 +53,12 @@ class GoalsFragment : Fragment() {
             } else {
                 Toast.makeText(context, "Please enter a goal", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Set click listener for Back button
+        backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as DashboardActivity).resetDashboardUI()
         }
 
         return view

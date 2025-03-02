@@ -2,17 +2,21 @@ package com.example.novana.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.novana.R
 import com.example.novana.databinding.ActivityDashboardBinding
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
+
+// Import your actual Fragment classes
+import com.example.novana.ui.fragment.JournalFragment
+import com.example.novana.ui.fragment.ExercisesFragment
+import com.example.novana.ui.fragment.GoalsFragment
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -41,26 +45,36 @@ class DashboardActivity : AppCompatActivity() {
         Log.d("DashboardActivity", "dailyExercisesCard: ${binding.dailyExercisesCard}")
         Log.d("DashboardActivity", "setGoalsCard: ${binding.setGoalsCard}")
         Log.d("DashboardActivity", "saveNotesButton: ${binding.saveNotesButton}")
+        Log.d("DashboardActivity", "fragmentContainer: ${binding.fragmentContainer}")
 
         // Set click listener for User Profile Icon
         binding.userProfileIcon.setOnClickListener {
             showProfileDialog()
         }
 
-        // Set click listeners for the three cards
+        // Set click listeners for the three cards with Fragment navigation
         binding.journalCard.setOnClickListener {
+            replaceFragment(JournalFragment())
+            binding.fragmentContainer.visibility = View.VISIBLE
+            binding.gridContainer.visibility = View.GONE
+            binding.notesSection.visibility = View.GONE // Hide notes section
             Toast.makeText(this, "Journal clicked", Toast.LENGTH_SHORT).show()
-            // Add navigation or functionality here later
         }
 
         binding.dailyExercisesCard.setOnClickListener {
+            replaceFragment(ExercisesFragment())
+            binding.fragmentContainer.visibility = View.VISIBLE
+            binding.gridContainer.visibility = View.GONE
+            binding.notesSection.visibility = View.GONE // Hide notes section
             Toast.makeText(this, "Daily Exercises clicked", Toast.LENGTH_SHORT).show()
-            // Add navigation or functionality here later
         }
 
         binding.setGoalsCard.setOnClickListener {
+            replaceFragment(GoalsFragment())
+            binding.fragmentContainer.visibility = View.VISIBLE
+            binding.gridContainer.visibility = View.GONE
+            binding.notesSection.visibility = View.GONE // Hide notes section
             Toast.makeText(this, "Set Goals clicked", Toast.LENGTH_SHORT).show()
-            // Add navigation or functionality here later
         }
 
         // Set click listener for Show Old Notes button
@@ -87,6 +101,33 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .addToBackStack(null)
+            .commit()
+        Log.d("DashboardActivity", "Replacing fragment with ${fragment.javaClass.simpleName}")
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+            binding.fragmentContainer.visibility = View.GONE
+            binding.gridContainer.visibility = View.VISIBLE
+            binding.notesSection.visibility = View.VISIBLE // Show notes section when back
+            Log.d("DashboardActivity", "Popped back stack, fragments remaining: ${supportFragmentManager.backStackEntryCount}")
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    // Public method to reset the UI
+    fun resetDashboardUI() {
+        binding.fragmentContainer.visibility = View.GONE
+        binding.gridContainer.visibility = View.VISIBLE
+        binding.notesSection.visibility = View.VISIBLE // Ensure notes section is visible
+    }
+
     private fun showProfileDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_profile, null)
         val logoutButton = dialogView.findViewById<Button>(R.id.logoutButton)
@@ -98,10 +139,8 @@ class DashboardActivity : AppCompatActivity() {
             .create()
 
         logoutButton.setOnClickListener {
-            // Add logout logic here (e.g., clear session, navigate to login screen)
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
-            // Example: finish() to close the activity and return to login
             finish()
         }
 
