@@ -17,8 +17,11 @@ class GoalsRepositoryImpl : GoalsRepository {
 
     override suspend fun addGoal(goal: GoalsModel, userId: String): Result<Unit> {
         return try {
-            val updatedGoal = goal.copy(userId = userId)
-            goalsCollection.add(updatedGoal.toMap()).await()
+            val updatedGoal = goal.copy(userId = userId) // id will be ignored, Firestore generates it
+            val documentRef = goalsCollection.add(updatedGoal.toMap()).await()
+            // Optionally, you could update the goal.id with the document ID if needed
+            // goal.id = documentRef.id.hashCode() // Uncomment if you want to sync local id
+            Log.d("GoalsRepository", "Added goal with document ID: ${documentRef.id}, userId: $userId")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e("GoalsRepository", "Add goal error: ${e.message}")
@@ -38,6 +41,7 @@ class GoalsRepositoryImpl : GoalsRepository {
                 ?.reference
                 ?.update(goal.toMap())
                 ?.await()
+            Log.d("GoalsRepository", "Updated goal with id: ${goal.id}, userId: ${goal.userId}")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e("GoalsRepository", "Update goal error: ${e.message}")
@@ -56,6 +60,7 @@ class GoalsRepositoryImpl : GoalsRepository {
                 ?.reference
                 ?.delete()
                 ?.await()
+            Log.d("GoalsRepository", "Deleted goal with id: $goalId, userId: $userId")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e("GoalsRepository", "Delete goal error: ${e.message}")
@@ -68,17 +73,18 @@ class GoalsRepositoryImpl : GoalsRepository {
             try {
                 val snapshot = goalsCollection.whereEqualTo("userId", userId).get().await()
                 val goals = snapshot.documents.mapNotNull { doc ->
-                    val id = doc.getLong("id")?.toInt() ?: 0
+                    val id = doc.getLong("id")?.toInt() ?: 0 // Fallback if id isn't set
                     val name = doc.getString("name") ?: ""
                     val isCompleted = doc.getBoolean("isCompleted") ?: false
                     val userIdFromDoc = doc.getString("userId") ?: ""
                     val timestamp = doc.getString("timestamp") ?: ""
-                    if (id != 0 || name.isNotEmpty()) {
+                    if (name.isNotEmpty()) {
                         GoalsModel(id, name, isCompleted, userIdFromDoc, timestamp)
                     } else {
                         null
                     }
                 }
+                Log.d("GoalsRepository", "Fetched ${goals.size} goals for userId: $userId")
                 emit(goals)
             } catch (e: Exception) {
                 Log.e("GoalsRepository", "Get goals error: ${e.message}")
