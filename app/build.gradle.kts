@@ -54,4 +54,11 @@ dependencies {
     implementation("com.cloudinary:cloudinary-android:2.1.0")
     implementation("com.squareup.picasso:picasso:2.8")
     implementation ("androidx.fragment:fragment-ktx:1.6.2") // Use the latest version
+    // Firebase
+    implementation ("com.google.firebase:firebase-auth-ktx:22.3.1") // Latest version
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.9.1") // Latest version
+
+// Lifecycle (for ViewModel)
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2") // Latest version
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
 }
