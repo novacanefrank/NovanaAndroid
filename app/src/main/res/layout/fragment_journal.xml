@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="Save Entry"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#388B97"
+        android:backgroundTint="@color/warm_brown"
     android:padding="12dp"
         android:layout_marginTop="40dp"
     android:layout_gravity="center"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:text="Old Entries"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#388B97"
+        android:backgroundTint="@color/warm_brown"
     android:padding="12dp"
     android:layout_gravity="center"
     android:layout_marginBottom="16dp"/>

@@ -10,9 +10,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.novana.R
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
+import com.example.novana.R
 import com.example.novana.ui.activity.DashboardNavigator
 import com.example.novana.viewmodel.ExercisesViewModel
 
@@ -25,7 +25,6 @@ class ExercisesFragment : Fragment() {
     private val exercises = mutableListOf<ExerciseModel>()
     private lateinit var adapter: ExercisesAdapter
     private lateinit var viewModel: ExercisesViewModel
-    private var isShowingOldExercises = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,9 +65,17 @@ class ExercisesFragment : Fragment() {
             val exerciseName = exerciseNameEditText.text.toString().trim()
             if (exerciseName.isNotEmpty()) {
                 val userId = getCurrentUserId()
+                val newExercise = ExerciseModel(name = exerciseName, userId = userId, isRunning = false) // Firestore assigns ID
+
+                // Add exercise to Firestore
                 viewModel.addExercise(exerciseName, userId)
+
+                // Add exercise to RecyclerView (inside the box)
+                exercises.add(newExercise)
+                adapter.notifyItemInserted(exercises.size - 1)
+
+                // Clear input field
                 exerciseNameEditText.text.clear()
-                Toast.makeText(context, "Exercise added: $exerciseName", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, "Please enter an exercise name", Toast.LENGTH_SHORT).show()
             }
@@ -97,6 +104,8 @@ class ExercisesFragment : Fragment() {
 
     private fun onDeleteClick(exercise: ExerciseModel) {
         viewModel.deleteExercise(exercise.id, exercise.userId)
+        exercises.remove(exercise)
+        adapter.notifyDataSetChanged()
         Toast.makeText(context, "${exercise.name} deleted", Toast.LENGTH_SHORT).show()
     }
 

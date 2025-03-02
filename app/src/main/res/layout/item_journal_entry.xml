@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="#F5EFE0"
         android:padding="16dp">
 
         <TextView
@@ -39,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:text="Update"
                 android:textColor="#FFFFFF"
-                android:backgroundTint="#800080"
+                android:backgroundTint="#81573B"
                 android:layout_marginEnd="8dp" />
 
             <Button
@@ -48,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:text="Delete"
                 android:textColor="#FFFFFF"
-                android:backgroundTint="#800080" />
+                android:backgroundTint="#815730" />
 
         </LinearLayout>
     </LinearLayout>

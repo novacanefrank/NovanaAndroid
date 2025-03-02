@@ -66,10 +66,17 @@ class GoalsFragment : Fragment() {
             val goalName = goalNameEditText.text.toString().trim()
             if (goalName.isNotEmpty()) {
                 val userId = getCurrentUserId()
-                val newGoal = GoalsModel(name = goalName, userId = userId) // Let Firestore generate id
+                val newGoal = GoalsModel(name = goalName, userId = userId, isCompleted = false) // Firestore assigns ID
+
+                // Add goal to Firestore
                 viewModel.addGoal(goalName, userId)
+
+                // Add goal to RecyclerView (inside the box)
+                goals.add(newGoal)
+                adapter.notifyItemInserted(goals.size - 1)
+
+                // Clear input field
                 goalNameEditText.text.clear()
-                Toast.makeText(context, "Goal added: $goalName", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, "Please enter a goal", Toast.LENGTH_SHORT).show()
             }
