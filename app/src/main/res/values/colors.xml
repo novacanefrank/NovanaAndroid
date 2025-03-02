@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#FFC107</color>
+    <color name="red">#FF0745</color>
+    <color name="grey">#474142</color>
+    <color name="blue">#2121B3</color>
+    <color name="lightblue">#8E8EC5</color>
+    <color name="pastel">#A4444C</color>
+    <color name="pastel_green">#DFF8EB</color> <!-- Calming soft green -->
+    <color name="soft_blue">#89CFF0</color>   <!-- Gentle, inviting blue for buttons -->
+    <color name="dark_gray">#757575</color>   <!-- Neutral gray for hints -->
+    <color name="blackk">#000000</color>       <!-- Text color -->
+    <color name="primary_green">#4A704B</color>
+    <color name="text_gray">#757575</color>
+    <color name="text_dark">#333333</color>
+    <color name="edittext_background">#F5F5F5</color>
+    <color name="light_mint_green">#B2E1D4</color>
+    <color name="peach_background">#FFE5E5</color>
+    <color name="soft_beige">#D8CFC4</color>
+    <color name="warm_brown_orange">#B65C3B</color>
+    <color name="warm_earth_tone">#F48864</color>
+    <color name="warm_brown">#92765E</color>
+
+</resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "524765049430",
+    "project_id": "novana123",
+    "storage_bucket": "novana123.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524765049430:android:97ed8fd9359647b11bc1f7",
+        "android_client_info": {
+          "package_name": "com.example.novana"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW7rYsfg5aiUqNIWndVx0kUxS46OBy65o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

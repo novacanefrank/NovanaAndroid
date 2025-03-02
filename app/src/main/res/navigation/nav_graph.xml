@@ -1,0 +1,20 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/goalFragment">
+
+    <fragment
+        android:id="@+id/goalFragment"
+        android:name="com.example.novana.ui.fragment.GoalsFragment"
+        android:label="Goal" />
+
+    <fragment
+        android:id="@+id/exerciseFragment"
+        android:name="com.example.novana.ui.fragment.ExercisesFragment"
+        android:label="Exercise" />
+
+    <fragment
+        android:id="@+id/journalFragment"
+        android:name="com.example.novana.ui.fragment.JournalFragment"
+        android:label="Journal" />
+
+</navigation>
