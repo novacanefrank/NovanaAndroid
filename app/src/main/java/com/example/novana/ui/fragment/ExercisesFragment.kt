@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.novana.R
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import com.example.novana.ui.activity.DashboardNavigator
+import com.example.novana.viewmodel.ExercisesViewModel
 
 class ExercisesFragment : Fragment() {
 
@@ -21,8 +23,9 @@ class ExercisesFragment : Fragment() {
     private lateinit var backButton: Button
     private lateinit var exercisesRecyclerView: RecyclerView
     private val exercises = mutableListOf<ExerciseModel>()
-    private var nextId = 0
     private lateinit var adapter: ExercisesAdapter
+    private lateinit var viewModel: ExercisesViewModel
+    private var isShowingOldExercises = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,18 +39,34 @@ class ExercisesFragment : Fragment() {
         backButton = view.findViewById(R.id.backButton)
         exercisesRecyclerView = view.findViewById(R.id.exercisesRecyclerView)
 
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this).get(ExercisesViewModel::class.java)
+
         // Set up RecyclerView
         adapter = ExercisesAdapter(exercises, ::onStartStopClick, ::onDeleteClick)
         exercisesRecyclerView.layoutManager = LinearLayoutManager(context)
         exercisesRecyclerView.adapter = adapter
 
+        // Observe exercises from ViewModel
+        viewModel.exercises.observe(viewLifecycleOwner) { loadedExercises ->
+            exercises.clear()
+            exercises.addAll(loadedExercises)
+            adapter.notifyDataSetChanged()
+            Log.d("ExercisesFragment", "Exercises updated: ${loadedExercises.size} items")
+        }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            error?.let {
+                Log.e("ExercisesFragment", "Error: $it")
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
         // Set click listener for Add Exercise button
         addExerciseButton.setOnClickListener {
             val exerciseName = exerciseNameEditText.text.toString().trim()
             if (exerciseName.isNotEmpty()) {
-                val newExercise = ExerciseModel(nextId++, exerciseName)
-                exercises.add(newExercise)
-                adapter.notifyDataSetChanged()
+                val userId = getCurrentUserId()
+                viewModel.addExercise(exerciseName, userId)
                 exerciseNameEditText.text.clear()
                 Toast.makeText(context, "Exercise added: $exerciseName", Toast.LENGTH_SHORT).show()
             } else {
@@ -61,19 +80,27 @@ class ExercisesFragment : Fragment() {
             (requireActivity() as? DashboardNavigator)?.resetDashboardUI() ?: Log.w("ExercisesFragment", "DashboardNavigator not implemented")
         }
 
+        // Load existing exercises
+        val userId = getCurrentUserId()
+        Log.d("ExercisesFragment", "Loading exercises for userId: $userId")
+        viewModel.loadExercises(userId)
+
         return view
     }
 
     private fun onStartStopClick(exercise: ExerciseModel) {
         exercise.isRunning = !exercise.isRunning
-        adapter.notifyDataSetChanged()
+        viewModel.updateExercise(exercise)
         val action = if (exercise.isRunning) "started" else "stopped"
         Toast.makeText(context, "${exercise.name} $action", Toast.LENGTH_SHORT).show()
     }
 
     private fun onDeleteClick(exercise: ExerciseModel) {
-        exercises.remove(exercise)
-        adapter.removeExercise(exercise)
+        viewModel.deleteExercise(exercise.id, exercise.userId)
         Toast.makeText(context, "${exercise.name} deleted", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getCurrentUserId(): String {
+        return com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
     }
 }
