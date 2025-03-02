@@ -96,10 +96,19 @@ class DashboardActivity : AppCompatActivity(), DashboardNavigator {
 
         logoutButton.setOnClickListener {
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+            performLogout()
             dialog.dismiss()
-            finish()
         }
 
         dialog.show()
+    }
+
+    private fun performLogout() {
+        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+        auth.signOut()
+        val intent = android.content.Intent(this, LoginActivity::class.java)
+        intent.flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }

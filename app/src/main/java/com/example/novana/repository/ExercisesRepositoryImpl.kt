@@ -19,7 +19,11 @@ class ExercisesRepositoryImpl : ExercisesRepository {
         return try {
             val updatedExercise = exercise.copy(userId = userId)
             val documentRef = exercisesCollection.add(updatedExercise.toMap()).await()
-            Log.d("ExercisesRepository", "Added exercise with document ID: ${documentRef.id}, userId: $userId")
+            // Sync the local id with a hash of the document ID
+            val newId = documentRef.id.hashCode() // Convert document ID to int
+            val exerciseWithId = updatedExercise.copy(id = newId) // Update id
+            documentRef.set(exerciseWithId.toMap()).await() // Update the document with new id
+            Log.d("ExercisesRepository", "Added exercise with document ID: ${documentRef.id}, synced id: $newId, userId: $userId")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e("ExercisesRepository", "Add exercise error: ${e.message}")
@@ -71,7 +75,7 @@ class ExercisesRepositoryImpl : ExercisesRepository {
             try {
                 val snapshot = exercisesCollection.whereEqualTo("userId", userId).get().await()
                 val exercises = snapshot.documents.mapNotNull { doc ->
-                    val id = doc.getLong("id")?.toInt() ?: 0
+                    val id = doc.getLong("id")?.toInt() ?: doc.get("id")?.toString()?.hashCode() ?: 0
                     val name = doc.getString("name") ?: ""
                     val isRunning = doc.getBoolean("isRunning") ?: false
                     val userIdFromDoc = doc.getString("userId") ?: ""
