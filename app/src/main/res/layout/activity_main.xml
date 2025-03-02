@@ -43,7 +43,7 @@
         android:layout_marginStart="9dp"
         android:layout_marginTop="16dp"
         android:padding="8dp"
-        android:text="Start growing your favourite plants with our helpful guides and tips"
+        android:text="Your personal space for growth and self-care."
         android:textColor="#757575"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
