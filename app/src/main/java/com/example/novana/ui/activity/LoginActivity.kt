@@ -32,12 +32,12 @@ class LoginActivity : AppCompatActivity() {
         viewModel.user.observe(this) { user ->
             user?.let {
                 Toast.makeText(this, "Login successful! Welcome, ${user.email}", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, DashboardActivity::class.java)) // Changed to DashboardActivity
-                finish() // Finish LoginActivity to prevent back navigation
+                startActivity(Intent(this, DashboardActivity::class.java))
+                finish()
             }
         }
 
-        // Log the views to ensure they’re not null
+
         Log.d("LoginActivity", "emailEditText: ${binding.emailEditText}")
         Log.d("LoginActivity", "passwordEditText: ${binding.passwordEditText}")
         Log.d("LoginActivity", "loginBtn: ${binding.loginBtn}")
@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.registerText.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
-            finish() // Optional: Finish LoginActivity to prevent back navigation to it
+            finish()
         }
     }
 }

@@ -25,7 +25,6 @@ class DashboardActivity : AppCompatActivity(), DashboardNavigator {
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Log the views to ensure they're not null
         Log.d("DashboardActivity", "userProfileIcon: ${binding.userProfileIcon}")
         Log.d("DashboardActivity", "journalCard: ${binding.journalCard}")
         Log.d("DashboardActivity", "dailyExercisesCard: ${binding.dailyExercisesCard}")
