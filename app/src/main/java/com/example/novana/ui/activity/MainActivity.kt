@@ -15,16 +15,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Set up "Login" button click listener
+
         binding.loginBtn.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
-            finish()  // Optional: Finish MainActivity to prevent back navigation
+            finish()
         }
 
-        // Set up "Register" button click listener
+
         binding.registerBtn.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
-            finish()  // Optional: Finish MainActivity to prevent back navigation
+            finish()
         }
     }
 }
