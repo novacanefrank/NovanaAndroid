@@ -19,12 +19,12 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize ViewModel
+
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        // Observe loading and error states
+
         viewModel.isLoading.observe(this) { isLoading ->
-            // Optionally update UI (e.g., show/hide progress bar)
+
         }
         viewModel.errorMessage.observe(this) { error ->
             error?.let { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
